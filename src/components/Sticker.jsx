@@ -48,94 +48,112 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
     >
       {mode === 'student' ? (
         <div className="student-sticker-content" style={{ 
-          color: '#fff', 
+          color: visuals.student.textColor || '#fff', 
           width: '100%', 
           height: '100%', 
           display: 'flex', 
           flexDirection: 'column',
-          padding: '12px',
-          justifyContent: 'space-between',
-          position: 'relative'
+          padding: '10px',
+          justifyContent: 'center',
+          position: 'relative',
+          gap: '8px'
         }}>
-          {/* Header / Institution */}
-          <div className="student-header" style={{ 
-            textAlign: 'center', 
-            fontSize: `${visuals.student.fontSize * 0.8}px`,
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-            marginBottom: '4px'
-          }}>
-            {visuals.student.institution || '___________________'}
-          </div>
+          {/* Header / Institution - Improved prominence */}
+          {visuals.student.institution && (
+            <div className="student-header" style={{ 
+              textAlign: 'center', 
+              fontSize: `${visuals.student.fontSize * 0.7}px`,
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '0.15em',
+              opacity: 0.9,
+              marginBottom: '2px',
+              textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+            }}>
+              {visuals.student.institution}
+            </div>
+          )}
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flex: 1 }}>
-            {/* Larger Image Section */}
+          <div style={{ display: 'flex', alignItems: 'stretch', gap: '10px', flex: 1, minHeight: 0 }}>
+            {/* Background Image / Icon - Made larger and more integrated */}
             <div className="student-image-container" style={{ 
               flexShrink: 0, 
-              width: '90px', 
-              height: '90px', 
-              borderRadius: '16px', 
-              border: `3px solid rgba(255,255,255,0.8)`, 
-              boxShadow: '0 8px 20px rgba(0,0,0,0.3)', 
+              width: '45%',
+              borderRadius: '12px', 
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)', 
               overflow: 'hidden', 
               background: '#fff',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              padding: '8px',
+              position: 'relative'
             }}>
-              <img src={visuals.student.image || '/assets/subjects/student_general.png'} alt="subject" style={{ width: '90%', height: '90%', objectFit: 'contain' }} />
+              <img 
+                src={visuals.student.image || '/assets/subjects/student_general.png'} 
+                alt="subject" 
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+              />
             </div>
 
-            {/* Data Section with Glassmorphism */}
+            {/* Data Section with Enhanced Glassmorphism */}
             <div className="student-data glass-effect" style={{ 
               flex: 1, 
               textAlign: 'left', 
               display: 'flex', 
               flexDirection: 'column', 
-              gap: '6px',
+              justifyContent: 'space-between',
+              gap: '4px',
               padding: '10px',
               borderRadius: '12px',
-              background: 'rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+              background: 'rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              minWidth: 0
             }}>
               <div className="data-line">
-                <span style={{ fontWeight: 800, fontSize: '9px', opacity: 0.8, display: 'block' }}>ASIGNATURA:</span>
+                <span style={{ fontWeight: 800, fontSize: '8px', opacity: 0.7, display: 'block', letterSpacing: '0.05em' }}>ASIGNATURA</span>
                 <div style={{ 
-                  borderBottom: '1.5px solid rgba(255,255,255,0.6)', 
-                  minHeight: '1.4em', 
                   fontSize: `${visuals.student.subjectSize}px`, 
                   fontWeight: 900,
                   textTransform: 'uppercase',
                   lineHeight: 1.1,
-                  marginTop: '0px'
+                  wordBreak: 'break-word',
+                  overflow: 'hidden',
+                  maxHeight: '2.4em'
                 }}>
-                  {visuals.student.subject || '___________________'}
+                  {visuals.student.subject || '__________'}
                 </div>
               </div>
-              <div className="data-line">
-                <span style={{ fontWeight: 800, fontSize: '9px', opacity: 0.8, display: 'block' }}>NOMBRE:</span>
-                <div style={{ 
-                  borderBottom: '1px solid rgba(255,255,255,0.4)', 
-                  minHeight: '1.2em', 
-                  fontSize: `${visuals.student.fontSize}px`, 
-                  fontWeight: 600 
-                }}>
-                  {visuals.student.name || '___________________'}
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <div className="data-line">
+                  <span style={{ fontWeight: 800, fontSize: '8px', opacity: 0.7, display: 'block' }}>ESTUDIANTE</span>
+                  <div style={{ 
+                    fontSize: `${visuals.student.fontSize}px`, 
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    borderBottom: '1px solid rgba(255,255,255,0.2)'
+                  }}>
+                    {visuals.student.name || '__________'}
+                  </div>
                 </div>
-              </div>
-              <div className="data-line">
-                <span style={{ fontWeight: 800, fontSize: '9px', opacity: 0.8, display: 'block' }}>GRADO:</span>
-                <div style={{ 
-                  borderBottom: '1px solid rgba(255,255,255,0.4)', 
-                  minHeight: '1.2em', 
-                  fontSize: `${visuals.student.fontSize}px`, 
-                  fontWeight: 600 
-                }}>
-                  {visuals.student.grade || '___________________'}
+                
+                <div className="data-line">
+                  <span style={{ fontWeight: 800, fontSize: '8px', opacity: 0.7, display: 'block' }}>GRADO / AULA</span>
+                  <div style={{ 
+                    fontSize: `${visuals.student.fontSize}px`, 
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    borderBottom: '1px solid rgba(255,255,255,0.2)'
+                  }}>
+                    {visuals.student.grade || '__________'}
+                  </div>
                 </div>
               </div>
             </div>

@@ -31,7 +31,8 @@ const App = () => {
       gradient: 'linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)',
       accentColor: '#3b82f6',
       fontSize: 14,
-      subjectSize: 18
+      subjectSize: 18,
+      textColor: '#ffffff'
     }
   });
 
@@ -77,23 +78,58 @@ const App = () => {
 
   useEffect(() => {
     const totalCount = config.gridCount * config.pageCount;
-    const newTags = Array.from({ length: totalCount }).map((_, i) => ({
-      id: i,
-      title: config.title,
-      price: config.price,
-      features: config.features,
-      mode: config.mode,
-      logo: config.logo
-    }));
-    setTags(newTags);
+    setTags(prevTags => {
+      const newTags = Array.from({ length: totalCount }).map((_, i) => {
+        if (prevTags[i]) return prevTags[i];
+        return {
+          id: i,
+          title: config.title,
+          price: config.price,
+          features: config.features,
+          mode: config.mode,
+          logo: config.logo,
+          student: { ...config.student }
+        };
+      });
+      return newTags;
+    });
   }, [config.gridCount, config.pageCount]);
 
   const updateAll = (key, val) => {
+    if (key === 'mode') {
+      setConfig(prev => ({ 
+        ...prev, 
+        [key]: val,
+        gridCount: val === 'student' ? 8 : prev.gridCount
+      }));
+      setTags(prev => prev.map(t => ({ 
+        ...t, 
+        [key]: val,
+        student: { ...config.student }
+      })));
+      return;
+    }
+
     setConfig(prev => ({ ...prev, [key]: val }));
     if (config.selectedId === 'all') {
       setTags(prev => prev.map(t => ({ ...t, [key]: val })));
     } else {
       setTags(prev => prev.map(t => t.id === config.selectedId ? { ...t, [key]: val } : t));
+    }
+  };
+
+  const updateStudent = (key, val) => {
+    if (config.selectedId === 'all') {
+      setConfig(prev => ({ ...prev, student: { ...prev.student, [key]: val } }));
+      setTags(prev => prev.map(t => ({ 
+        ...t, 
+        student: { ...t.student, [key]: val } 
+      })));
+    } else {
+      setTags(prev => prev.map(t => t.id === config.selectedId ? { 
+        ...t, 
+        student: { ...t.student, [key]: val } 
+      } : t));
     }
   };
 
@@ -136,7 +172,7 @@ const App = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (config.mode === 'student') {
-          setConfig(prev => ({ ...prev, student: { ...prev.student, image: reader.result } }));
+          updateStudent('image', reader.result);
         } else {
           updateAll('logo', reader.result);
         }
@@ -169,9 +205,9 @@ const App = () => {
                 value={config.selectedId} 
                 onChange={(e) => setConfig(prev => ({ ...prev, selectedId: e.target.value === 'all' ? 'all' : parseInt(e.target.value) }))}
               >
-                <option value="all">Todas las etiquetas</option>
-                {tags.map(t => (
-                  <option key={t.id} value={t.id}>Etiqueta {t.id + 1}</option>
+                <option value="all">Todas ({tags.length})</option>
+                {tags.map((t, idx) => (
+                  <option key={t.id} value={t.id}>Etiqueta {idx + 1} {t.student?.name ? `- ${t.student.name}` : ''}</option>
                 ))}
               </select>
             </div>
@@ -269,36 +305,36 @@ const App = () => {
                   <label>Asignatura / Curso</label>
                   <input 
                     type="text" 
-                    placeholder="Eje: Matemáticas"
-                    value={config.student.subject} 
-                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, subject: e.target.value } }))} 
+                    placeholder="Ej: Matemáticas"
+                    value={config.selectedId === 'all' ? config.student.subject : (tags.find(t => t.id === config.selectedId)?.student?.subject || '')} 
+                    onChange={(e) => updateStudent('subject', e.target.value)} 
                   />
                 </div>
                 <div className="field">
                   <label>Nombre del Estudiante</label>
                   <input 
                     type="text" 
-                    placeholder="Eje: Juan Pérez"
-                    value={config.student.name} 
-                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, name: e.target.value } }))} 
+                    placeholder="Ej: Juan Pérez"
+                    value={config.selectedId === 'all' ? config.student.name : (tags.find(t => t.id === config.selectedId)?.student?.name || '')} 
+                    onChange={(e) => updateStudent('name', e.target.value)} 
                   />
                 </div>
                 <div className="field">
                   <label>Grado / Aula</label>
                   <input 
                     type="text" 
-                    placeholder="Eje: 5to Primaria"
-                    value={config.student.grade} 
-                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, grade: e.target.value } }))} 
+                    placeholder="Ej: 5to Primaria"
+                    value={config.selectedId === 'all' ? config.student.grade : (tags.find(t => t.id === config.selectedId)?.student?.grade || '')} 
+                    onChange={(e) => updateStudent('grade', e.target.value)} 
                   />
                 </div>
                 <div className="field">
                   <label>Institución / Colegio</label>
                   <input 
                     type="text" 
-                    placeholder="Eje: I.E. San Juan"
-                    value={config.student.institution} 
-                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, institution: e.target.value } }))} 
+                    placeholder="Ej: I.E. San Juan"
+                    value={config.selectedId === 'all' ? config.student.institution : (tags.find(t => t.id === config.selectedId)?.student?.institution || '')} 
+                    onChange={(e) => updateStudent('institution', e.target.value)} 
                   />
                 </div>
                 <div className="field">
@@ -310,23 +346,23 @@ const App = () => {
                   </label>
                 </div>
                 <div className="field">
-                  <label>Tamaño Fuente Base: {config.student.fontSize}px</label>
+                  <label>Tamaño Fuente Base: {config.selectedId === 'all' ? config.student.fontSize : (tags.find(t => t.id === config.selectedId)?.student?.fontSize || 14)}px</label>
                   <input 
                     type="range" 
                     min="8" 
                     max="24" 
-                    value={config.student.fontSize} 
-                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, fontSize: parseInt(e.target.value) } }))} 
+                    value={config.selectedId === 'all' ? config.student.fontSize : (tags.find(t => t.id === config.selectedId)?.student?.fontSize || 14)} 
+                    onChange={(e) => updateStudent('fontSize', parseInt(e.target.value))} 
                   />
                 </div>
                 <div className="field">
-                  <label>Tamaño Asignatura: {config.student.subjectSize}px</label>
+                  <label>Tamaño Asignatura: {config.selectedId === 'all' ? config.student.subjectSize : (tags.find(t => t.id === config.selectedId)?.student?.subjectSize || 18)}px</label>
                   <input 
                     type="range" 
                     min="12" 
                     max="40" 
-                    value={config.student.subjectSize} 
-                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, subjectSize: parseInt(e.target.value) } }))} 
+                    value={config.selectedId === 'all' ? config.student.subjectSize : (tags.find(t => t.id === config.selectedId)?.student?.subjectSize || 18)} 
+                    onChange={(e) => updateStudent('subjectSize', parseInt(e.target.value))} 
                   />
                 </div>
                 <div className="field">
@@ -337,16 +373,29 @@ const App = () => {
                         key={s.id}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        onClick={() => setConfig(prev => ({
-                          ...prev,
-                          student: {
-                            ...prev.student,
+                        onClick={() => {
+                          const updateData = {
                             subject: s.name,
                             image: s.image,
                             gradient: s.gradient,
                             accentColor: s.accent
+                          };
+                          if (config.selectedId === 'all') {
+                            setConfig(prev => ({
+                              ...prev,
+                              student: { ...prev.student, ...updateData }
+                            }));
+                            setTags(prev => prev.map(t => ({ 
+                              ...t, 
+                              student: { ...t.student, ...updateData } 
+                            })));
+                          } else {
+                            setTags(prev => prev.map(t => t.id === config.selectedId ? { 
+                              ...t, 
+                              student: { ...t.student, ...updateData } 
+                            } : t));
                           }
-                        }))}
+                        }}
                         style={{ 
                           cursor: 'pointer',
                           borderRadius: '8px',
@@ -366,15 +415,22 @@ const App = () => {
                     <label>Fondo G.</label>
                     <input 
                       type="color" 
-                      value={config.student.accentColor} 
-                      onChange={(e) => setConfig(prev => ({ 
-                        ...prev, 
-                        student: { 
-                          ...prev.student, 
-                          accentColor: e.target.value,
-                          gradient: `linear-gradient(135deg, ${e.target.value}bb 0%, ${e.target.value} 100%)`
-                        } 
-                      }))} 
+                      value={config.selectedId === 'all' ? config.student.accentColor : (tags.find(t => t.id === config.selectedId)?.student?.accentColor || '#3b82f6')} 
+                      onChange={(e) => {
+                        const color = e.target.value;
+                        const gradient = `linear-gradient(135deg, ${color}bb 0%, ${color} 100%)`;
+                        updateStudent('accentColor', color);
+                        updateStudent('gradient', gradient);
+                      }} 
+                      style={{ width: '100%', height: '40px', padding: 2 }} 
+                    />
+                  </div>
+                  <div className="field" style={{ flex: 1 }}>
+                    <label>Color Letra</label>
+                    <input 
+                      type="color" 
+                      value={config.selectedId === 'all' ? (config.student.textColor || '#ffffff') : (tags.find(t => t.id === config.selectedId)?.student?.textColor || '#ffffff')} 
+                      onChange={(e) => updateStudent('textColor', e.target.value)} 
                       style={{ width: '100%', height: '40px', padding: 2 }} 
                     />
                   </div>
@@ -478,7 +534,7 @@ const App = () => {
                         priceSize: config.priceSize,
                         strokeColor: config.strokeColor,
                         textColor: config.textColor,
-                        student: config.student
+                        student: tag.student || config.student
                       }}
                       index={idx}
                     />
