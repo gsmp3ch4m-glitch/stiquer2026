@@ -44,7 +44,8 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
         background: visuals.student.gradient,
         borderRadius: '12px',
         overflow: 'hidden',
-        position: 'relative'
+        position: 'relative',
+        border: `4px solid ${visuals.student.accentColor || '#3b82f6'}`
       } : {}}
     >
       {mode === 'student' && (
@@ -134,8 +135,8 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
               textAlign: 'left', 
               display: 'flex', 
               flexDirection: 'column', 
-              justifyContent: 'space-between',
-              gap: '4px',
+              justifyContent: 'center',
+              gap: '8px',
               padding: '10px',
               borderRadius: '12px',
               background: 'rgba(255, 255, 255, 0.12)',
