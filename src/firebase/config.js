@@ -3,12 +3,12 @@ import { initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBBn_dKjP_RgUM9GbO5c7rQdEivuZfGFkQ",
-  authDomain: "stiquer-pro-2026-pm.firebaseapp.com",
-  projectId: "stiquer-pro-2026-pm",
-  storageBucket: "stiquer-pro-2026-pm.firebasestorage.app",
-  messagingSenderId: "524104734696",
-  appId: "1:524104734696:web:4160d54b132221812cb65d"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
