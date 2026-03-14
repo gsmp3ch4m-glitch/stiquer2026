@@ -102,20 +102,19 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
           )}
 
           <div style={{ display: 'flex', alignItems: 'stretch', gap: '8px', flex: 1, minHeight: 0, zIndex: 2 }}>
-            {/* Background Image / Icon - Smaller size (~35%) and prominent border */}
+            {/* Background Image / Icon - No more white gaps, total fill and high-contrast border */}
             <div className="student-image-container" style={{ 
               flexShrink: 0, 
-              width: '35%',
-              borderRadius: visuals.student.imageShape === 'round' ? '50%' : '12px', 
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2), inset 0 0 0 2px rgba(255,255,255,0.8)', 
+              width: '38%',
+              aspectRatio: '3/4', /* Matching the cropper */
+              borderRadius: visuals.student.imageShape === 'round' ? '50%' : '8px', 
+              boxShadow: '0 8px 25px rgba(0,0,0,0.3), 0 0 15px rgba(255,255,255,0.4)', 
               overflow: 'hidden', 
-              background: '#fff',
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'stretch',
               justifyContent: 'center',
-              padding: visuals.student.imageShape === 'round' ? '4px' : '6px',
               position: 'relative',
-              border: '2px solid rgba(255,255,255,0.9)'
+              border: '3.5px solid #ffffff'
             }}>
               <img 
                 src={visuals.student.image || '/assets/subjects/student_general.png'} 
@@ -123,8 +122,8 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
                 style={{ 
                    width: '100%', 
                    height: '100%', 
-                   objectFit: 'contain',
-                   borderRadius: visuals.student.imageShape === 'round' ? '50%' : '8px'
+                   objectFit: 'cover', /* This ensures the space is filled */
+                   borderRadius: visuals.student.imageShape === 'round' ? '50%' : '4px'
                 }} 
               />
             </div>

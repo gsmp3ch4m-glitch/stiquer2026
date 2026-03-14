@@ -76,7 +76,7 @@ const ImageCropper = ({ image, onCropComplete, onCancel, shape = 'rect' }) => {
             image={image}
             crop={crop}
             zoom={zoom}
-            aspect={1}
+            aspect={3 / 4}
             cropShape={shape === 'round' ? 'round' : 'rect'}
             showGrid={false}
             onCropChange={onCropChange}
