@@ -43,9 +43,36 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
       style={mode === 'student' ? { 
         background: visuals.student.gradient,
         borderRadius: '12px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        position: 'relative'
       } : {}}
     >
+      {mode === 'student' && (
+        <div className="sun-effect" style={{
+          position: 'absolute',
+          top: '-20%',
+          right: '-10%',
+          width: '60%',
+          height: '60%',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 40%, transparent 70%)',
+          filter: 'blur(20px)',
+          pointerEvents: 'none',
+          zIndex: 1
+        }} />
+      )}
+      {mode === 'student' && (
+        <div className="bubbles-container" style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          zIndex: 1,
+          opacity: 0.4
+        }}>
+           <div style={{ position: 'absolute', top: '10%', left: '5%', width: '15px', height: '15px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+           <div style={{ position: 'absolute', top: '60%', left: '20%', width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+           <div style={{ position: 'absolute', top: '30%', right: '25%', width: '12px', height: '12px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)' }} />
+        </div>
+      )}
       {mode === 'student' ? (
         <div className="student-sticker-content" style={{ 
           color: visuals.student.textColor || '#fff', 
@@ -74,25 +101,31 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
             </div>
           )}
 
-          <div style={{ display: 'flex', alignItems: 'stretch', gap: '10px', flex: 1, minHeight: 0 }}>
-            {/* Background Image / Icon - Made larger and more integrated */}
+          <div style={{ display: 'flex', alignItems: 'stretch', gap: '8px', flex: 1, minHeight: 0, zIndex: 2 }}>
+            {/* Background Image / Icon - Smaller size (~35%) and prominent border */}
             <div className="student-image-container" style={{ 
               flexShrink: 0, 
-              width: '45%',
-              borderRadius: '12px', 
-              boxShadow: '0 4px 15px rgba(0,0,0,0.2)', 
+              width: '35%',
+              borderRadius: visuals.student.imageShape === 'round' ? '50%' : '12px', 
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2), inset 0 0 0 2px rgba(255,255,255,0.8)', 
               overflow: 'hidden', 
               background: '#fff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '8px',
-              position: 'relative'
+              padding: visuals.student.imageShape === 'round' ? '4px' : '6px',
+              position: 'relative',
+              border: '2px solid rgba(255,255,255,0.9)'
             }}>
               <img 
                 src={visuals.student.image || '/assets/subjects/student_general.png'} 
                 alt="subject" 
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                style={{ 
+                   width: '100%', 
+                   height: '100%', 
+                   objectFit: 'contain',
+                   borderRadius: visuals.student.imageShape === 'round' ? '50%' : '8px'
+                }} 
               />
             </div>
 

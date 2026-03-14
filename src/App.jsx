@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Printer, RefreshCcw, Trash2, Image as ImageIcon, Sparkles, Save, FolderOpen } from 'lucide-react';
-import { db } from './firebase/config';
 import { collection, addDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import Sticker from './components/Sticker';
+import ImageCropper from './components/ImageCropper';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -32,9 +29,12 @@ const App = () => {
       accentColor: '#3b82f6',
       fontSize: 14,
       subjectSize: 18,
-      textColor: '#ffffff'
+      textColor: '#ffffff',
+      imageShape: 'rect'
     }
   });
+
+  const [cropper, setCropper] = useState({ active: false, image: null });
 
   const SUBJECTS = [
     { 
@@ -172,13 +172,18 @@ const App = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (config.mode === 'student') {
-          updateStudent('image', reader.result);
+          setCropper({ active: true, image: reader.result });
         } else {
           updateAll('logo', reader.result);
         }
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCropComplete = (croppedImage) => {
+    updateStudent('image', croppedImage);
+    setCropper({ active: false, image: null });
   };
 
   const handlePrint = () => window.print();
@@ -339,11 +344,21 @@ const App = () => {
                 </div>
                 <div className="field">
                   <label>Imagen Personalizada</label>
-                  <label className="secondary-button" style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}>
-                    <ImageIcon size={16} style={{ marginRight: '8px' }} /> 
-                    {config.student.image ? 'Cambiar Imagen' : 'Subir Icono Estudiante'}
-                    <input type="file" hidden accept="image/*" onChange={handleLogoUpload} />
-                  </label>
+                  <div className="row">
+                    <label className="secondary-button" style={{ flex: 1, display: 'flex', justifyContent: 'center', cursor: 'pointer' }}>
+                      <ImageIcon size={16} style={{ marginRight: '8px' }} /> 
+                      {config.student.image ? 'Cambiar' : 'Subir'}
+                      <input type="file" hidden accept="image/*" onChange={handleLogoUpload} />
+                    </label>
+                    <select 
+                      style={{ flex: 1 }}
+                      value={config.selectedId === 'all' ? config.student.imageShape : (tags.find(t => t.id === config.selectedId)?.student?.imageShape || 'rect')} 
+                      onChange={(e) => updateStudent('imageShape', e.target.value)}
+                    >
+                      <option value="rect">Cuadrada</option>
+                      <option value="round">Circular</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="field">
                   <label>Tamaño Fuente Base: {config.selectedId === 'all' ? config.student.fontSize : (tags.find(t => t.id === config.selectedId)?.student?.fontSize || 14)}px</label>
@@ -545,6 +560,17 @@ const App = () => {
           ))}
         </div>
       </main>
+
+      <AnimatePresence>
+        {cropper.active && (
+          <ImageCropper 
+            image={cropper.image} 
+            shape={config.selectedId === 'all' ? config.student.imageShape : (tags.find(t => t.id === config.selectedId)?.student?.imageShape || 'rect')}
+            onCropComplete={handleCropComplete} 
+            onCancel={() => setCropper({ active: false, image: null })} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
