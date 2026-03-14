@@ -1,3 +1,7 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Printer, RefreshCcw, Trash2, Image as ImageIcon, Sparkles, Save, FolderOpen } from 'lucide-react';
+import { db } from './firebase/config';
 import { collection, addDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import Sticker from './components/Sticker';
 import ImageCropper from './components/ImageCropper';
