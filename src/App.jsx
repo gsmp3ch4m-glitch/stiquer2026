@@ -26,9 +26,12 @@ const App = () => {
       subject: '',
       name: '',
       grade: '',
+      institution: '',
       image: '',
       gradient: 'linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)',
-      accentColor: '#3b82f6'
+      accentColor: '#3b82f6',
+      fontSize: 14,
+      subjectSize: 18
     }
   });
 
@@ -132,7 +135,11 @@ const App = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        updateAll('logo', reader.result);
+        if (config.mode === 'student') {
+          setConfig(prev => ({ ...prev, student: { ...prev.student, image: reader.result } }));
+        } else {
+          updateAll('logo', reader.result);
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -283,6 +290,43 @@ const App = () => {
                     placeholder="Eje: 5to Primaria"
                     value={config.student.grade} 
                     onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, grade: e.target.value } }))} 
+                  />
+                </div>
+                <div className="field">
+                  <label>Institución / Colegio</label>
+                  <input 
+                    type="text" 
+                    placeholder="Eje: I.E. San Juan"
+                    value={config.student.institution} 
+                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, institution: e.target.value } }))} 
+                  />
+                </div>
+                <div className="field">
+                  <label>Imagen Personalizada</label>
+                  <label className="secondary-button" style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}>
+                    <ImageIcon size={16} style={{ marginRight: '8px' }} /> 
+                    {config.student.image ? 'Cambiar Imagen' : 'Subir Icono Estudiante'}
+                    <input type="file" hidden accept="image/*" onChange={handleLogoUpload} />
+                  </label>
+                </div>
+                <div className="field">
+                  <label>Tamaño Fuente Base: {config.student.fontSize}px</label>
+                  <input 
+                    type="range" 
+                    min="8" 
+                    max="24" 
+                    value={config.student.fontSize} 
+                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, fontSize: parseInt(e.target.value) } }))} 
+                  />
+                </div>
+                <div className="field">
+                  <label>Tamaño Asignatura: {config.student.subjectSize}px</label>
+                  <input 
+                    type="range" 
+                    min="12" 
+                    max="40" 
+                    value={config.student.subjectSize} 
+                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, subjectSize: parseInt(e.target.value) } }))} 
                   />
                 </div>
                 <div className="field">
