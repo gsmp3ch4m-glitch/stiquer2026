@@ -308,17 +308,32 @@ body {
 
 /* Print Overrides */
 @media print {
-  .sidebar { display: none; }
-  .preview-area { padding: 0 !important; background: white !important; overflow: visible !important; height: auto !important; width: 100vw !important; }
+  @page {
+    margin: 0;
+    size: A4;
+  }
+  
+  .sidebar { display: none !important; }
+  .preview-area { 
+    padding: 0 !important; 
+    margin: 0 !important;
+    background: white !important; 
+    overflow: visible !important; 
+    height: auto !important; 
+    width: 210mm !important; 
+  }
   .pages-container { gap: 0 !important; }
   .a4-page { 
     box-shadow: none !important; 
     margin: 0 !important; 
-    padding: 0mm !important; 
+    padding: 10mm !important; /* Internal padding for stickers */
     transform: none !important; 
     break-after: page !important;
     page-break-after: always !important;
     -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    width: 210mm !important;
+    height: 297mm !important;
   }
   body { background: white !important; overflow: visible !important; height: auto !important; }
   .tag-item.selected::after { display: none; }
