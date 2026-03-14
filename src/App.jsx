@@ -21,8 +21,54 @@ const App = () => {
     strokeColor: '#000000',
     textColor: '#000000',
     logo: null,
-    pageCount: 1 // New state for multiple sheets
+    pageCount: 1,
+    student: {
+      subject: '',
+      name: '',
+      grade: '',
+      image: '',
+      gradient: 'linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)',
+      accentColor: '#3b82f6'
+    }
   });
+
+  const SUBJECTS = [
+    { 
+      id: 'math', 
+      name: 'Matemáticas', 
+      image: '/assets/subjects/math.png', 
+      gradient: 'linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)',
+      accent: '#0ea5e9'
+    },
+    { 
+      id: 'science', 
+      name: 'Ciencias', 
+      image: '/assets/subjects/science.png', 
+      gradient: 'linear-gradient(135deg, #22c55e 0%, #15803d 100%)',
+      accent: '#22c55e'
+    },
+    { 
+      id: 'art', 
+      name: 'Arte', 
+      image: '/assets/subjects/art.png', 
+      gradient: 'linear-gradient(135deg, #d946ef 0%, #a21caf 100%)',
+      accent: '#d946ef'
+    },
+    { 
+      id: 'history', 
+      name: 'Historia', 
+      image: '/assets/subjects/history.png', 
+      gradient: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)',
+      accent: '#f59e0b'
+    },
+    { 
+      id: 'language', 
+      name: 'Lenguaje', 
+      image: '/assets/subjects/language.png', 
+      gradient: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
+      accent: '#ef4444'
+    }
+  ];
 
   const [tags, setTags] = useState([]);
 
@@ -186,21 +232,109 @@ const App = () => {
                 <label className="radio-label" style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
                   <input type="radio" checked={config.mode === 'features'} onChange={() => updateAll('mode', 'features')} /> Características
                 </label>
+                <label className="radio-label" style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', color: '#fff' }}>
+                  <input type="radio" checked={config.mode === 'student'} onChange={() => updateAll('mode', 'student')} /> Estudiante
+                </label>
               </div>
             </div>
-            <div className="field">
-              <label>Texto Superior</label>
-              <input type="text" value={config.title} onChange={(e) => updateAll('title', e.target.value)} />
-            </div>
-            {config.mode === 'price' ? (
+            {config.mode !== 'student' && (
+              <div className="field">
+                <label>Texto Superior</label>
+                <input type="text" value={config.title} onChange={(e) => updateAll('title', e.target.value)} />
+              </div>
+            )}
+            {config.mode === 'price' && (
               <div className="field">
                 <label>Precio</label>
                 <input type="text" value={config.price} onChange={(e) => updateAll('price', e.target.value)} />
               </div>
-            ) : (
+            )}
+            {config.mode === 'features' && (
               <div className="field">
                 <label>Características</label>
                 <textarea value={config.features} onChange={(e) => updateAll('features', e.target.value)} />
+              </div>
+            )}
+
+            {config.mode === 'student' && (
+              <div className="student-controls" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
+                <div className="field">
+                  <label>Asignatura / Curso</label>
+                  <input 
+                    type="text" 
+                    placeholder="Eje: Matemáticas"
+                    value={config.student.subject} 
+                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, subject: e.target.value } }))} 
+                  />
+                </div>
+                <div className="field">
+                  <label>Nombre del Estudiante</label>
+                  <input 
+                    type="text" 
+                    placeholder="Eje: Juan Pérez"
+                    value={config.student.name} 
+                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, name: e.target.value } }))} 
+                  />
+                </div>
+                <div className="field">
+                  <label>Grado / Aula</label>
+                  <input 
+                    type="text" 
+                    placeholder="Eje: 5to Primaria"
+                    value={config.student.grade} 
+                    onChange={(e) => setConfig(prev => ({ ...prev, student: { ...prev.student, grade: e.target.value } }))} 
+                  />
+                </div>
+                <div className="field">
+                  <label>Plantillas Rápidas</label>
+                  <div className="subjects-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
+                    {SUBJECTS.map(s => (
+                      <motion.div
+                        key={s.id}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setConfig(prev => ({
+                          ...prev,
+                          student: {
+                            ...prev.student,
+                            subject: s.name,
+                            image: s.image,
+                            gradient: s.gradient,
+                            accentColor: s.accent
+                          }
+                        }))}
+                        style={{ 
+                          cursor: 'pointer',
+                          borderRadius: '8px',
+                          overflow: 'hidden',
+                          border: config.student.subject === s.name ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)',
+                          background: 'rgba(255,255,255,0.05)',
+                          padding: '4px'
+                        }}
+                      >
+                        <img src={s.image} alt={s.name} style={{ width: '100%', aspectRatio: '1', objectFit: 'contain' }} />
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+                <div className="row">
+                   <div className="field" style={{ flex: 1 }}>
+                    <label>Fondo G.</label>
+                    <input 
+                      type="color" 
+                      value={config.student.accentColor} 
+                      onChange={(e) => setConfig(prev => ({ 
+                        ...prev, 
+                        student: { 
+                          ...prev.student, 
+                          accentColor: e.target.value,
+                          gradient: `linear-gradient(135deg, ${e.target.value}bb 0%, ${e.target.value} 100%)`
+                        } 
+                      }))} 
+                      style={{ width: '100%', height: '40px', padding: 2 }} 
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -299,7 +433,8 @@ const App = () => {
                         labelY: config.labelY,
                         priceSize: config.priceSize,
                         strokeColor: config.strokeColor,
-                        textColor: config.textColor
+                        textColor: config.textColor,
+                        student: config.student
                       }}
                       index={idx}
                     />

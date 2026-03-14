@@ -40,40 +40,75 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
       }}
       className={`tag-item mode-${mode} ${isSelected ? 'selected' : ''}`} 
       onClick={onClick}
+      style={mode === 'student' ? { 
+        background: visuals.student.gradient,
+        borderRadius: '12px',
+        overflow: 'hidden'
+      } : {}}
     >
-      <svg 
-        className="tag-svg" 
-        viewBox="0 0 200 200" 
-        preserveAspectRatio="none"
-        fill="none"
-        stroke={strokeColor}
-        strokeWidth="4"
-        strokeLinejoin="round"
-      >
-        {DESIGNS[design]}
-      </svg>
-      <div className="tag-content" style={{ color: textColor }}>
-        {logo && <img src={logo} alt="logo" className="tag-logo" />}
-        <div 
-          className="tag-label" 
-          style={{ 
-            fontSize: `${labelSize}px`,
-            transform: `translateY(${labelY}px)`
-          }}
-        >
-          {title}
+      {mode === 'student' ? (
+        <div className="student-sticker-content" style={{ color: '#fff', width: '100%', height: '100%', display: 'flex', padding: '10px', alignItems: 'center', gap: '10px' }}>
+          <div className="student-image-container" style={{ flexShrink: 0, width: '70px', height: '70px', borderRadius: '12px', border: `3px solid ${visuals.student.accentColor}`, boxShadow: '0 0 15px rgba(255,255,255,0.3)', overflow: 'hidden', background: '#fff' }}>
+            <img src={visuals.student.image || '/assets/subjects/student_general.png'} alt="subject" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          </div>
+          <div className="student-data" style={{ flex: 1, textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div className="data-line">
+              <span style={{ fontWeight: 800, fontSize: '10px', opacity: 0.9 }}>ASIGNATURA:</span>
+              <div style={{ borderBottom: '1px solid rgba(255,255,255,0.5)', minHeight: '1.2em', fontSize: '12px', fontWeight: 600 }}>
+                {visuals.student.subject || '___________________'}
+              </div>
+            </div>
+            <div className="data-line">
+              <span style={{ fontWeight: 800, fontSize: '10px', opacity: 0.9 }}>NOMBRE:</span>
+              <div style={{ borderBottom: '1px solid rgba(255,255,255,0.5)', minHeight: '1.2em', fontSize: '12px', fontWeight: 600 }}>
+                {visuals.student.name || '___________________'}
+              </div>
+            </div>
+            <div className="data-line">
+              <span style={{ fontWeight: 800, fontSize: '10px', opacity: 0.9 }}>GRADO:</span>
+              <div style={{ borderBottom: '1px solid rgba(255,255,255,0.5)', minHeight: '1.2em', fontSize: '12px', fontWeight: 600 }}>
+                {visuals.student.grade || '___________________'}
+              </div>
+            </div>
+          </div>
         </div>
-        {mode === 'price' ? (
-          <div className="tag-price-container" style={{ fontSize: `${priceSize}px`, lineHeight: 1 }}>
-            <span className="tag-currency" style={{ fontSize: '0.4em' }}>S/</span>
-            <span className="tag-price">{price}</span>
+      ) : (
+        <>
+          <svg 
+            className="tag-svg" 
+            viewBox="0 0 200 200" 
+            preserveAspectRatio="none"
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth="4"
+            strokeLinejoin="round"
+          >
+            {DESIGNS[design]}
+          </svg>
+          <div className="tag-content" style={{ color: textColor }}>
+            {logo && <img src={logo} alt="logo" className="tag-logo" />}
+            <div 
+              className="tag-label" 
+              style={{ 
+                fontSize: `${labelSize}px`,
+                transform: `translateY(${labelY}px)`
+              }}
+            >
+              {title}
+            </div>
+            {mode === 'price' ? (
+              <div className="tag-price-container" style={{ fontSize: `${priceSize}px`, lineHeight: 1 }}>
+                <span className="tag-currency" style={{ fontSize: '0.4em' }}>S/</span>
+                <span className="tag-price">{price}</span>
+              </div>
+            ) : (
+              <div className="tag-features">
+                {formatFeatures(features)}
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="tag-features">
-            {formatFeatures(features)}
-          </div>
-        )}
-      </div>
+        </>
+      )}
     </motion.div>
   );
 };

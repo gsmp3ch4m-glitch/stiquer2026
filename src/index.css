@@ -52,6 +52,19 @@ body {
   color: white;
 }
 
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 .sidebar h1 {
   font-size: 28px;
   font-weight: 900;
@@ -337,4 +350,21 @@ body {
   }
   body { background: white !important; overflow: visible !important; height: auto !important; }
   .tag-item.selected::after { display: none; }
+}
+
+.mode-student .student-data .data-line {
+    margin-bottom: 2px;
+}
+
+.mode-student:hover {
+    filter: brightness(1.1) saturate(1.1);
+}
+
+.subjects-gallery::-webkit-scrollbar {
+  height: 4px;
+}
+
+.subjects-gallery::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
 }
