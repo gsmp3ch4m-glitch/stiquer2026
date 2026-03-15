@@ -83,118 +83,103 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
           height: '100%', 
           display: 'flex', 
           flexDirection: 'column',
-          padding: '10px',
-          justifyContent: 'center',
+          padding: '8px',
+          justifyContent: 'space-between',
           position: 'relative',
-          gap: '8px'
+          zIndex: 2,
+          WebkitPrintColorAdjust: 'exact',
+          printColorAdjust: 'exact'
         }}>
-          {/* Header / Institution - Improved prominence */}
-          {visuals.student.institution && (
-            <div className="student-header" style={{ 
-              textAlign: 'center', 
-              fontSize: `${visuals.student.fontSize * 0.7}px`,
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              letterSpacing: '0.15em',
-              opacity: 0.9,
-              marginBottom: '2px',
-              textShadow: '0 1px 2px rgba(0,0,0,0.2)'
-            }}>
-              {visuals.student.institution}
-            </div>
-          )}
+          {/* Institution Header */}
+          <div style={{ 
+            textAlign: 'center', 
+            fontSize: `${visuals.student.fontSize * 0.7}px`,
+            fontWeight: 800,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            marginBottom: '4px',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis'
+          }}>
+            {visuals.student.institution || 'INSTITUCIÓN'}
+          </div>
 
-          <div style={{ display: 'flex', alignItems: 'stretch', gap: '8px', flex: 1, minHeight: 0, zIndex: 2 }}>
-            {/* Background Image / Icon - No more white gaps, total fill and high-contrast border */}
-            <div className="student-image-container" style={{ 
-              flexShrink: 0, 
-              width: '38%',
-              aspectRatio: '3/4', /* Matching the cropper */
-              borderRadius: visuals.student.imageShape === 'round' ? '50%' : '8px', 
-              boxShadow: '0 8px 25px rgba(0,0,0,0.3), 0 0 15px rgba(255,255,255,0.4)', 
-              overflow: 'hidden', 
-              display: 'flex',
-              alignItems: 'stretch',
-              justifyContent: 'center',
-              position: 'relative',
-              border: '3.5px solid #ffffff'
+          <div style={{ 
+            display: 'flex', 
+            gap: '8px', 
+            flex: 1, 
+            minHeight: 0,
+            alignItems: 'center'
+          }}>
+            {/* Foto Container */}
+            <div style={{ 
+              width: '40%',
+              height: '85%',
+              borderRadius: visuals.student.imageShape === 'round' ? '50%' : '6px', 
+              overflow: 'hidden',
+              border: '3px solid #fff',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              flexShrink: 0
             }}>
               <img 
                 src={visuals.student.image || '/assets/subjects/student_general.png'} 
-                alt="subject" 
-                style={{ 
-                   width: '100%', 
-                   height: '100%', 
-                   objectFit: 'cover', /* This ensures the space is filled */
-                   borderRadius: visuals.student.imageShape === 'round' ? '50%' : '4px'
-                }} 
+                alt="student" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
               />
             </div>
 
-            {/* Data Section with Enhanced Glassmorphism */}
-            <div className="student-data glass-effect" style={{ 
-              flex: 1, 
-              textAlign: 'left', 
-              display: 'flex', 
-              flexDirection: 'column', 
+            {/* Data Box - simplified for print */}
+            <div style={{ 
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'center',
-              gap: '8px',
-              padding: '10px',
-              borderRadius: '12px',
-              background: 'rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              gap: '4px',
+              padding: '6px',
+              background: 'rgba(255,255,255,0.15)',
+              borderRadius: '8px',
               minWidth: 0,
-              WebkitPrintColorAdjust: 'exact',
-              printColorAdjust: 'exact'
+              height: '85%',
+              WebkitPrintColorAdjust: 'exact'
             }}>
-              <div className="data-line">
-                <span style={{ fontWeight: 800, fontSize: '8px', opacity: 0.7, display: 'block', letterSpacing: '0.05em' }}>ASIGNATURA</span>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '7px', fontWeight: 900, opacity: 0.8 }}>CURSO</span>
                 <div style={{ 
-                  fontSize: `${visuals.student.subjectSize}px`, 
+                  fontSize: `${visuals.student.subjectSize * 0.9}px`, 
                   fontWeight: 900,
                   textTransform: 'uppercase',
-                  lineHeight: 1.1,
-                  wordBreak: 'break-word',
-                  overflow: 'hidden',
-                  maxHeight: '2.2em', /* Bound the height */
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical'
+                  lineHeight: 1,
+                  maxHeight: '2em',
+                  overflow: 'hidden'
                 }}>
-                  {visuals.student.subject || '__________'}
+                  {visuals.student.subject || 'CURSO'}
                 </div>
               </div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <div className="data-line">
-                  <span style={{ fontWeight: 800, fontSize: '8px', opacity: 0.7, display: 'block' }}>ESTUDIANTE</span>
-                  <div style={{ 
-                    fontSize: `${visuals.student.fontSize}px`, 
-                    fontWeight: 600,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    borderBottom: '1px solid rgba(255,255,255,0.2)',
-                    minHeight: '1.2em'
-                  }}>
-                    {visuals.student.name || '__________'}
-                  </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '7px', fontWeight: 900, opacity: 0.8 }}>ALUMNO</span>
+                <div style={{ 
+                  fontSize: `${visuals.student.fontSize * 0.9}px`, 
+                  fontWeight: 700,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}>
+                  {visuals.student.name || 'NOMBRE'}
                 </div>
-                
-                <div className="data-line">
-                  <span style={{ fontWeight: 800, fontSize: '8px', opacity: 0.7, display: 'block' }}>GRADO / AULA</span>
-                  <div style={{ 
-                    fontSize: `${visuals.student.fontSize}px`, 
-                    fontWeight: 600,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    borderBottom: '1px solid rgba(255,255,255,0.2)'
-                  }}>
-                    {visuals.student.grade || '__________'}
-                  </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '7px', fontWeight: 900, opacity: 0.8 }}>GRADO</span>
+                <div style={{ 
+                  fontSize: `${visuals.student.fontSize * 0.9}px`, 
+                  fontWeight: 700,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}>
+                  {visuals.student.grade || 'GRADO'}
                 </div>
               </div>
             </div>

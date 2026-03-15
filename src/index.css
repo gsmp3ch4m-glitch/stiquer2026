@@ -411,24 +411,37 @@ body {
 @media print {
   @page {
     margin: 0;
-    size: A4;
+    size: A4 portrait;
   }
   
-  .sidebar, .mobile-menu-btn, .close-btn, .bubbles-container { display: none !important; }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;
+  }
   
+  .sidebar, .mobile-menu-btn, .close-btn, .bubbles-container, .sun-effect { display: none !important; }
+  
+  .app-container {
+    display: block !important;
+    height: auto !important;
+  }
+
   .preview-area { 
+    display: block !important;
     padding: 0 !important; 
     margin: 0 !important;
     background: white !important; 
-    overflow: visible !important; 
-    display: block !important;
-    height: auto !important; 
+    overflow: hidden !important; 
     width: 210mm !important; 
+    height: 297mm !important;
   }
   
   .pages-container { 
-    gap: 0 !important; 
     display: block !important;
+    gap: 0 !important; 
   }
   
   .a4-page { 
@@ -436,27 +449,25 @@ body {
     margin: 0 !important; 
     padding: 10mm !important;
     transform: none !important; 
-    break-after: page !important;
-    page-break-after: always !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
     width: 210mm !important;
     height: 297mm !important;
     position: relative !important;
     overflow: hidden !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .tags-grid {
+    height: 100% !important;
+    width: 100% !important;
+    page-break-inside: avoid !important;
   }
   
   .tag-item {
     break-inside: avoid !important;
+    page-break-inside: avoid !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-  }
-  
-  body { 
-    background: white !important; 
-    overflow: visible !important; 
-    height: auto !important; 
-    width: auto !important;
   }
   
   .tag-item.selected::after { display: none; }
