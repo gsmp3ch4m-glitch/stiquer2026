@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Printer, RefreshCcw, Trash2, Image as ImageIcon, Sparkles, Save, FolderOpen } from 'lucide-react';
+import { Printer, RefreshCcw, Trash2, Image as ImageIcon, Sparkles, Save, FolderOpen, Menu, X } from 'lucide-react';
 import { db } from './firebase/config';
 import { collection, addDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import Sticker from './components/Sticker';
@@ -8,6 +8,7 @@ import ImageCropper from './components/ImageCropper';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [config, setConfig] = useState({
     title: '¡OFERTA!',
     price: '9.90',
@@ -197,11 +198,16 @@ const App = () => {
       <motion.aside 
         initial={{ x: -380 }} 
         animate={{ x: 0 }} 
-        className="sidebar"
+        className={`sidebar ${sidebarOpen ? 'open' : ''}`}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-          <Sparkles className="text-blue-500" size={24} color="#3b82f6" />
-          <h1>Stiquer Pro</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Sparkles className="text-blue-500" size={24} color="#3b82f6" />
+            <h1>Stiquer Pro</h1>
+          </div>
+          <button className="close-btn md-hidden" onClick={() => setSidebarOpen(false)} style={{ display: window.innerWidth <= 768 ? 'block' : 'none' }}>
+            <X size={24} />
+          </button>
         </div>
         <p>Experiencia dinámica 2026</p>
 
@@ -525,6 +531,10 @@ const App = () => {
           <Printer size={18} /> Imprimir {config.pageCount} Hojas
         </motion.button>
       </motion.aside>
+
+      <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
+        <Menu size={24} />
+      </button>
 
       <main className="preview-area">
         <div className="pages-container" style={{ display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }}>

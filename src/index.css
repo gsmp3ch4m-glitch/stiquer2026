@@ -31,10 +31,25 @@ body {
   height: 100vh;
 }
 
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+    height: auto;
+  }
+}
+
 .app-container {
   display: flex;
   height: 100vh;
   width: 100vw;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
 }
 
 /* Sidebar Styling with Glassmorphism */
@@ -50,6 +65,24 @@ body {
   box-shadow: 10px 0 30px rgba(0,0,0,0.3);
   z-index: 100;
   color: white;
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    border-right: none;
+    z-index: 2000;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
 }
 
 .sidebar::-webkit-scrollbar {
@@ -93,6 +126,15 @@ body {
   scroll-behavior: smooth;
 }
 
+@media (max-width: 768px) {
+  .preview-area {
+    padding: 20px 10px;
+    height: auto;
+    min-height: calc(100vh - 60px);
+    overflow-x: hidden;
+  }
+}
+
 .a4-page {
   width: var(--a4-width);
   height: var(--a4-height);
@@ -107,6 +149,21 @@ body {
 
 @media (max-width: 1400px) {
   .a4-page { transform: scale(0.7); }
+}
+
+@media (max-width: 768px) {
+  .a4-page {
+    transform: scale(0.4) translateY(-50%);
+    margin-top: -150px;
+    transform-origin: top center;
+  }
+}
+
+@media (max-width: 480px) {
+  .a4-page {
+    transform: scale(0.32) translateY(-70%);
+    margin-top: -250px;
+  }
 }
 
 .tags-grid {
@@ -197,6 +254,30 @@ body {
   justify-content: center;
   gap: 10px;
   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+}
+
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
+  z-index: 2100;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
 }
 
 .primary-button:hover {
