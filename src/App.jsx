@@ -205,7 +205,7 @@ const App = () => {
             <Sparkles className="text-blue-500" size={24} color="#3b82f6" />
             <h1>Stiquer Pro</h1>
           </div>
-          <button className="close-btn md-hidden" onClick={() => setSidebarOpen(false)} style={{ display: window.innerWidth <= 768 ? 'block' : 'none' }}>
+          <button className="close-btn" onClick={() => setSidebarOpen(false)} style={{ display: 'flex', background: 'rgba(255,255,255,0.1)', padding: '8px' }}>
             <X size={24} />
           </button>
         </div>
@@ -532,9 +532,28 @@ const App = () => {
         </motion.button>
       </motion.aside>
 
-      <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
+      <button 
+        className={`mobile-menu-btn ${sidebarOpen ? 'hidden' : ''}`} 
+        onClick={() => setSidebarOpen(true)}
+      >
         <Menu size={24} />
       </button>
+
+      {sidebarOpen && (
+        <div 
+          style={{ 
+            position: 'fixed', 
+            top: 0, 
+            left: 0, 
+            right: 0, 
+            bottom: 0, 
+            background: 'rgba(0,0,0,0.4)', 
+            zIndex: 1500,
+            backdropFilter: 'blur(4px)'
+          }} 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       <main className="preview-area">
         <div className="pages-container" style={{ display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }}>
