@@ -45,7 +45,9 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
         borderRadius: '12px',
         overflow: 'hidden',
         position: 'relative',
-        border: `4px solid ${visuals.student.accentColor || '#3b82f6'}`
+        border: `4px solid ${visuals.student.accentColor || '#3b82f6'}`,
+        WebkitPrintColorAdjust: 'exact',
+        printColorAdjust: 'exact'
       } : {}}
     >
       {mode === 'student' && (
@@ -143,7 +145,9 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
               backdropFilter: 'blur(12px)',
               border: '1px solid rgba(255, 255, 255, 0.15)',
               boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-              minWidth: 0
+              minWidth: 0,
+              WebkitPrintColorAdjust: 'exact',
+              printColorAdjust: 'exact'
             }}>
               <div className="data-line">
                 <span style={{ fontWeight: 800, fontSize: '8px', opacity: 0.7, display: 'block', letterSpacing: '0.05em' }}>ASIGNATURA</span>
@@ -154,7 +158,10 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
                   lineHeight: 1.1,
                   wordBreak: 'break-word',
                   overflow: 'hidden',
-                  maxHeight: '2.4em'
+                  maxHeight: '2.2em', /* Bound the height */
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical'
                 }}>
                   {visuals.student.subject || '__________'}
                 </div>
@@ -169,7 +176,8 @@ const Sticker = ({ data, design, isSelected, onClick, visuals, index }) => {
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    borderBottom: '1px solid rgba(255,255,255,0.2)'
+                    borderBottom: '1px solid rgba(255,255,255,0.2)',
+                    minHeight: '1.2em'
                   }}>
                     {visuals.student.name || '__________'}
                   </div>
